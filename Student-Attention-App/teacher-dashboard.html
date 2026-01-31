@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Teacher Dashboard</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+body{background: linear-gradient(120deg,#fdfbfb,#e0f2ff,#e8eaff);color:#1e293b;}
+
+header{display:flex;justify-content:space-between;align-items:center;padding:30px 80px;}
+.logo{font-weight:600;font-size:18px;}
+nav a{margin-left:30px;text-decoration:none;color:#2563eb;font-weight:500;}
+
+.hero{padding:20px 80px 10px;}
+.hero h1{font-size:54px;font-weight:700;line-height:1.1;}
+.hero p{color:#64748b;margin-top:10px;}
+
+.dashboard{margin:40px auto;width:90%;max-width:1100px;}
+.section-title{font-size:22px;margin-bottom:15px;}
+
+.create-area{display:flex;gap:15px;margin-bottom:30px;flex-wrap:wrap;}
+input{padding:14px 16px;border-radius:14px;border:1px solid #e2e8f0;width:260px;font-size:14px;}
+input:focus{border-color:#2563eb;}
+
+button.primary{background:#2563eb;color:white;border:none;padding:12px 22px;border-radius:14px;font-weight:600;cursor:pointer;}
+
+#classList{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:22px;}
+
+.card{background:#fff;border-radius:20px;padding:18px;box-shadow:0 10px 25px rgba(0,0,0,0.08);transition:0.3s;}
+.card:hover{transform:translateY(-5px);}
+.card img{width:100%;height:130px;object-fit:cover;border-radius:14px;margin-bottom:15px;}
+.card h3{margin-bottom:5px;}
+.card p{color:#64748b;font-size:14px;}
+
+.code-box{
+    background:#2563eb;
+    color:white;
+    padding:8px;
+    border-radius:10px;
+    text-align:center;
+    font-size:13px;
+    margin-top:8px;
+    font-weight:600;
+}
+
+.btn-group{display:flex;gap:10px;margin-top:15px;}
+.btn-group button{flex:1;border:none;padding:9px;border-radius:12px;cursor:pointer;font-size:13px;}
+.openBtn{background:#22c55e;color:white;}
+.deleteBtn{background:#ef4444;color:white;}
+
+@media(max-width:900px){
+    header{padding:20px 30px;}
+    .hero{padding:20px 30px;}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo">Teacher Panel</div>
+    <nav>
+        <a href="#">Dashboard</a>
+        <a href="#">Classes</a>
+        <a href="#">Settings</a>
+    </nav>
+</header>
+
+<section class="hero">
+    <h1>Teacher Dashboard</h1>
+    <p>Manage classrooms and organize your teaching space with a clean modern interface.</p>
+</section>
+
+<div class="dashboard">
+
+    <div class="section-title">Create Classroom</div>
+    <div class="create-area">
+        <input id="className" placeholder="Enter Class Name">
+        <button class="primary" onclick="createClass()">Create</button>
+    </div>
+
+    <div class="section-title">Your Classrooms</div>
+    <div id="classList"></div>
+
+</div>
+
+<script>
+const sampleImages=[
+ "https://static.vecteezy.com/system/resources/previews/022/298/789/large_2x/blue-background-abstract-background-banner-background-free-photo.jpeg",
+ "https://static.vecteezy.com/system/resources/previews/000/701/690/original/abstract-polygonal-banner-background-vector.jpg",
+ "https://cdn.pixabay.com/photo/2017/01/18/10/43/banner-1989514_1280.png",
+ "https://cdn.pixabay.com/photo/2017/01/18/10/43/banner-1989514_1280.png",
+ "https://cdn.pixabay.com/photo/2017/01/18/10/43/banner-1989514_1280.png",
+ "https://cdn.pixabay.com/photo/2017/01/18/10/43/banner-1989514_1280.png"
+];
+
+let classrooms=JSON.parse(localStorage.getItem("teacherClassrooms"))||[];
+
+function save(){localStorage.setItem("teacherClassrooms",JSON.stringify(classrooms));}
+
+function generateCode(){
+ return "CLS"+Math.floor(1000+Math.random()*9000);
+}
+
+function createClass(){
+ let name=document.getElementById("className").value.trim();
+ if(!name) return;
+
+ classrooms.push({
+  classId:Date.now(),
+  className:name,
+  image:sampleImages[Math.floor(Math.random()*sampleImages.length)],
+  sections:Math.floor(Math.random()*5)+1,
+  code:generateCode()
+ });
+
+ save();
+ loadClasses();
+ document.getElementById("className").value="";
+}
+
+function deleteClass(id){
+ classrooms=classrooms.filter(c=>c.classId!==id);
+ save();
+ loadClasses();
+}
+
+function loadClasses(){
+ let container=document.getElementById("classList");
+ container.innerHTML="";
+ classrooms.forEach(c=>{
+  let card=document.createElement("div");
+  card.className="card";
+  card.innerHTML=`
+    <img src="${c.image}">
+    <h3>${c.className}</h3>
+    <p>${c.sections} Sections</p>
+    <div class="code-box">Class Code: ${c.code}</div>
+    <div class="btn-group">
+        <button class="openBtn" onclick="openClass(${c.classId})"><i class="fa fa-door-open"></i> Open</button>
+        <button class="deleteBtn" onclick="deleteClass(${c.classId})"><i class="fa fa-trash"></i></button>
+    </div>`;
+  container.appendChild(card);
+ });
+}
+
+function openClass(id){
+ localStorage.setItem("selectedClass",id);
+ window.location="classroom-panel.html";
+}
+
+loadClasses();
+</script>
+
+</body>
+</html>

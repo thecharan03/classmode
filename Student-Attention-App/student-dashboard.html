@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Student Portal</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
+body{display:flex;background:#f6f8fc;color:#1e293b}
+
+/* SIDEBAR */
+.sidebar{
+    width:230px;background:#ffffff;height:100vh;padding:20px;
+    box-shadow:2px 0 15px rgba(0,0,0,0.05);position:fixed
+}
+.sidebar h2{color:#4f46e5;margin-bottom:30px}
+.sidebar a{
+    display:flex;align-items:center;gap:12px;padding:10px;
+    border-radius:10px;text-decoration:none;color:#64748b;
+    margin-bottom:10px;font-weight:500;transition:0.2s
+}
+.sidebar a:hover{background:#eef2ff;color:#4f46e5}
+
+/* MAIN AREA */
+.main{margin-left:250px;width:100%;padding:25px}
+
+/* BANNER */
+.banner{
+    background:#4f46e5;color:white;padding:25px;
+    border-radius:20px;display:flex;justify-content:space-between;
+    align-items:center;margin-bottom:25px
+}
+.banner h1{font-size:22px;font-weight:500}
+
+/* JOIN CLASS BOX */
+.join-box{
+    background:white;padding:18px;border-radius:16px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.05);margin-bottom:25px;
+}
+.join-box input{
+    padding:10px;border-radius:8px;border:1px solid #cbd5e1;width:200px;
+}
+.join-box button{
+    padding:10px 16px;background:#4f46e5;color:white;
+    border:none;border-radius:8px;margin-left:8px;cursor:pointer;
+}
+
+/* COURSES */
+.course-section h2{margin-bottom:15px}
+.courses{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.course-card{
+    background:white;border-radius:18px;
+    box-shadow:0 10px 25px rgba(0,0,0,0.05);
+    overflow:hidden;transition:0.2s
+}
+.course-card:hover{transform:translateY(-5px)}
+.course-card img{width:100%;height:140px;object-fit:cover}
+.course-content{padding:15px}
+.progress{height:8px;background:#e2e8f0;border-radius:6px;margin-top:8px}
+.progress-bar{height:8px;background:#4f46e5;border-radius:6px}
+
+/* JOIN BUTTON */
+.join-btn{
+    margin-top:10px;padding:8px 12px;border:none;
+    border-radius:8px;background:#e2e8f0;
+    cursor:not-allowed;font-size:13px
+}
+.join-btn.active{
+    background:#4f46e5;color:white;cursor:pointer
+}
+
+/* ASSIGNMENTS */
+.assignments{margin-top:30px}
+.assignment-item{
+    background:white;padding:15px;border-radius:12px;
+    margin-bottom:10px;display:flex;justify-content:space-between;
+    box-shadow:0 5px 15px rgba(0,0,0,0.05)
+}
+
+@media(max-width:900px){.courses{grid-template-columns:1fr}}
+</style>
+</head>
+
+<body>
+
+<div class="sidebar">
+    <h2>Education++</h2>
+    <a href="#"><i class="fa fa-home"></i> Dashboard</a>
+    <a href="#"><i class="fa fa-book"></i> classes</a>
+    <a href="#"><i class="fa fa-calendar"></i> Schedule</a>
+    <a href="#"><i class="fa fa-file"></i> Doubts</a>
+    <a href="#"><i class="fa fa-bell"></i> attendance</a>
+</div>
+
+<div class="main">
+
+<div class="banner">
+    <div>
+        <h1>Hi, <span id="studentName">Student</span></h1>
+        <p>Learn anytime, anywhere.</p>
+    </div>
+    <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" width="80">
+</div>
+
+<!-- JOIN CLASS FEATURE -->
+<div class="join-box">
+    <h2>Join a Class</h2>
+    <input id="classCodeInput" placeholder="Enter Class Code">
+    <button onclick="joinClass()">Join</button>
+    <p id="joinMsg" style="margin-top:8px;font-size:14px;"></p>
+</div>
+
+<div class="course-section">
+    <h2>My Classes</h2>
+    <div class="courses">
+
+        <div class="course-card">
+            <img src="https://images.unsplash.com/photo-1511379938547-c1f69419868d"/>
+            <div class="course-content">
+                <h3>Soft Skills</h3>
+                <small>Progress 60%</small>
+                <div class="progress"><div class="progress-bar" style="width:60%"></div></div>
+                <button class="join-btn" data-class="softskills">Enter Class</button>
+            </div>
+        </div>
+
+        <div class="course-card">
+            <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c"/>
+            <div class="course-content">
+                <h3>C++</h3>
+                <small>Progress 50%</small>
+                <div class="progress"><div class="progress-bar" style="width:50%"></div></div>
+                <button class="join-btn" data-class="cpp">Enter Class</button>
+            </div>
+        </div>
+
+        <div class="course-card">
+            <img src="https://images.unsplash.com/photo-1492724441997-5dc865305da7"/>
+            <div class="course-content">
+                <h3>Physics</h3>
+                <small>Progress 40%</small>
+                <div class="progress"><div class="progress-bar" style="width:40%"></div></div>
+                <button class="join-btn" data-class="physics">Enter Class</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="assignments">
+    <h2>My Assignments</h2>
+    <div class="assignment-item"><span>Assignment 1 — presentation</span><span>Due: Oct 2</span></div>
+    <div class="assignment-item"><span>Assignment 2 — C++ Basics</span><span>Due: Oct 5</span></div>
+</div>
+
+</div>
+
+<script>
+let studentInfo = JSON.parse(localStorage.getItem("studentInfo"));
+if(studentInfo){document.getElementById("studentName").innerText = studentInfo.name;}
+
+const classCodes = { softskills:"SS2026", cpp:"CPP999", physics:"PHY111" };
+let joinedClasses = JSON.parse(localStorage.getItem("joinedClasses")) || [];
+
+function joinClass(){
+    let code = classCodeInput.value.trim().toUpperCase();
+    let found = Object.keys(classCodes).find(k => classCodes[k]===code);
+    if(found){
+        if(!joinedClasses.includes(found)){
+            joinedClasses.push(found);
+            localStorage.setItem("joinedClasses", JSON.stringify(joinedClasses));
+        }
+        joinMsg.style.color="green";
+        joinMsg.innerText="Class Joined!";
+        activateButtons();
+    }else{
+        joinMsg.style.color="red";
+        joinMsg.innerText="Invalid Code";
+    }
+}
+
+function activateButtons(){
+    document.querySelectorAll(".join-btn").forEach(btn=>{
+        let c=btn.getAttribute("data-class");
+        if(joinedClasses.includes(c)){
+            btn.classList.add("active");
+            btn.disabled=false;
+            btn.onclick=()=>alert("Entering "+c+" class...");
+        }
+    });
+}
+activateButtons();
+
+/* TAB SWITCH MONITOR */
+let studentName = localStorage.getItem("studentName") || "Unknown Student";
+function sendViolation(type){
+    let data={name:studentName,type,time:new Date().toLocaleTimeString()};
+    let v=JSON.parse(localStorage.getItem("violations"))||[];
+    v.push(data);
+    localStorage.setItem("violations",JSON.stringify(v));
+}
+document.addEventListener("visibilitychange",()=>{if(document.hidden)sendViolation("Switched Tab/App")});
+window.addEventListener("blur",()=>sendViolation("Left Class Window"));
+</script>
+
+</body>
+</html>

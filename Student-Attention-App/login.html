@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif;}
+
+body{
+min-height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background:#eef1ff;
+overflow:hidden;
+}
+
+/* Background */
+body::before{
+content:"";
+position:absolute;
+width:400px;height:400px;
+background:#3a49c9;
+border-radius:50%;
+top:-120px;right:-120px;
+filter:blur(80px);opacity:0.6;
+}
+
+body::after{
+content:"";
+position:absolute;
+width:350px;height:350px;
+background:#5563ff;
+border-radius:50%;
+bottom:-100px;left:-120px;
+filter:blur(90px);opacity:0.6;
+}
+
+/* CARD */
+.form-container{
+display:flex;
+width:1000px;
+height:620px;
+border-radius:30px;
+overflow:hidden;
+background:rgba(255,255,255,0.9);
+box-shadow:0 25px 60px rgba(0,0,0,0.15);
+z-index:2;
+}
+
+/* LEFT PANEL */
+.left-panel{
+width:50%;
+background:linear-gradient(160deg,#1d2a7a,#2432a4,#3a49c9);
+color:white;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+padding:60px;
+text-align:center;
+}
+
+.custom-image{
+width:70%;
+height:250px;
+border-radius:20px;
+overflow:hidden;
+background:rgba(255,255,255,0.15);
+}
+
+.custom-image img{
+width:100%;
+height:100%;
+object-fit:cover;
+}
+
+/* RIGHT PANEL */
+.right-panel{
+width:50%;
+padding:70px 60px;
+display:flex;
+flex-direction:column;
+justify-content:center;
+}
+
+form{display:flex;flex-direction:column;gap:22px;}
+
+.input-box{position:relative;}
+
+.input-box input{
+width:100%;
+padding:15px;
+border-radius:12px;
+border:1px solid #e2e5f1;
+background:#f8f9ff;
+outline:none;
+}
+
+/* Floating label */
+.input-box label{
+position:absolute;
+top:50%;left:15px;
+transform:translateY(-50%);
+font-size:13px;
+color:#777;
+background:white;
+padding:0 5px;
+transition:0.3s;
+pointer-events:none;
+}
+
+.input-box input:focus + label,
+.input-box input:valid + label{
+top:-7px;
+font-size:11px;
+color:#4b5cff;
+}
+
+/* PASSWORD EYE */
+.password-toggle{
+position:absolute;
+right:15px;
+top:50%;
+transform:translateY(-50%);
+cursor:pointer;
+color:#666;
+}
+
+/* BUTTON */
+button[type="submit"]{
+padding:15px;
+border:none;
+border-radius:30px;
+background:linear-gradient(90deg,#2f3cff,#5563ff);
+color:white;
+font-weight:600;
+cursor:pointer;
+}
+
+/* Google button */
+.google-login button{
+width:100%;
+background:white;
+border:1px solid #ddd;
+padding:13px;
+border-radius:30px;
+cursor:pointer;
+display:flex;
+align-items:center;
+justify-content:center;
+gap:10px;
+}
+
+/* REGISTER TEXT */
+.register-text{
+margin-top:25px;
+text-align:center;
+font-size:14px;
+}
+
+@media(max-width:900px){
+.form-container{flex-direction:column;height:auto;width:95%;}
+.left-panel{display:none;}
+.right-panel{width:100%;}
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="form-container">
+
+<!-- LEFT -->
+<div class="left-panel">
+<h1>Welcome Back</h1>
+<p>Login to continue your learning journey!</p>
+
+<div class="custom-image">
+<img src="images/login pic.jpeg">
+</div>
+</div>
+
+<!-- RIGHT -->
+<div class="right-panel">
+
+<h2>Login</h2>
+
+<form onsubmit="return loginUser(event)">
+
+<div class="input-box">
+<input type="email" id="email" required>
+<label>Email</label>
+</div>
+
+<div class="input-box">
+<input type="password" id="password" required>
+<label>Password</label>
+<i class="fa-solid fa-eye password-toggle" onclick="togglePassword('password')"></i>
+</div>
+
+<button type="submit">Login</button>
+
+<div class="google-login">
+<button type="button">
+<i class="fa-brands fa-google"></i>
+Login with Google
+</button>
+</div>
+
+</form>
+
+<div class="register-text">
+Don't have account? <a href="register.html">Register</a>
+</div>
+
+</div>
+</div>
+
+<script>
+
+/* Toggle password */
+function togglePassword(id){
+let field = document.getElementById(id);
+field.type = field.type === "password" ? "text" : "password";
+}
+
+/* Login API */
+async function loginUser(e){
+e.preventDefault();
+
+let email = document.getElementById("email").value;
+let password = document.getElementById("password").value;
+
+try{
+
+let res = await fetch("http://localhost:5000/api/auth/login",{
+method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
+body:JSON.stringify({email,password})
+});
+
+let data = await res.json();
+
+if(res.ok){
+
+localStorage.setItem("token",data.token);
+localStorage.setItem("user",JSON.stringify(data.user));
+
+if(data.user.role === "teacher"){
+window.location="teacher-dashboard.html";
+}else{
+window.location="student-dashboard.html";
+}
+
+}else{
+alert(data.message || "Login failed");
+}
+
+}catch(err){
+alert("Server error");
+}
+
+}
+
+</script>
+
+</body>
+</html>

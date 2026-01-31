@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Attention Improvement App</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+
+    <style>
+
+
+/* FOOTER */
+.mega-footer{
+    margin-top:100px;
+    padding:60px 50px 30px;
+    background:rgba(255,255,255,0.04);
+    backdrop-filter:blur(10px);
+    border-top:1px solid rgba(255,255,255,0.08);
+}
+
+.footer-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+    gap:40px;
+    margin-bottom:40px;
+}
+
+.footer-col h4{
+    margin-bottom:15px;
+    font-size:16px;
+    color:#ffffff;
+}
+
+.footer-col a{
+    display:block;
+    text-decoration:none;
+    color:#cfcfff;
+    margin-bottom:10px;
+    font-size:14px;
+    transition:0.3s;
+}
+
+.footer-col a:hover{
+    color:#ff6ec4;
+}
+
+.footer-bottom{
+    border-top:1px solid rgba(255,255,255,0.08);
+    padding-top:20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    gap:10px;
+    color:#cfcfff;
+    font-size:14px;
+}
+
+.footer-links a{
+    margin-right:15px;
+    text-decoration:none;
+    color:#cfcfff;
+}
+
+.footer-links a:hover{
+    color:#ff6ec4;
+}
+
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            color: rgb(250, 250, 250);
+            background: linear-gradient(135deg, #0b0f2a, #141b4d, #1d0f3a);
+            min-height: 100vh;
+        }
+
+        /* NAVBAR */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 50px;
+        }
+
+        .navbar h1 {
+            font-size: 28px;
+            background: linear-gradient(90deg, #ff6ec4, #7873f5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* BUTTON STYLE */
+        .btn {
+            display: inline-block;
+            padding: 10px 22px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            color: white;
+            background: linear-gradient(90deg, #ff6ec4, #7873f5);
+            box-shadow: 0 0 15px rgba(255, 110, 196, 0.5);
+            transition: 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 25px rgba(120, 115, 245, 0.9);
+        }
+
+        .nav-buttons .btn {
+            margin-left: 15px;
+        }
+
+        /* HERO */
+        .hero {
+            text-align: center;
+            margin-top: 80px;
+            padding: 20px;
+        }
+
+        .hero h2 {
+            font-size: 42px;
+            margin-bottom: 15px;
+        }
+
+        .hero p {
+            color: #cfcfff;
+            font-size: 18px;
+            margin-bottom: 30px;
+        }
+
+        .start-btn {
+            font-size: 18px;
+            padding: 14px 30px;
+        }
+
+        /* FEATURES */
+        .features {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 80px 40px;
+            flex-wrap: wrap;
+        }
+
+        .feature-card {
+            width: 260px;
+            padding: 25px;
+            border-radius: 20px;
+            backdrop-filter: blur(12px);
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            transition: 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 0 20px rgba(255, 110, 196, 0.4);
+        }
+
+        .feature-card p {
+            color: #d6d6ff;
+        }
+
+        /* SLIDER SECTION */
+        .slider-section{
+            display:flex;
+            justify-content:center;
+            align-items:center;
+            margin:70px 0;
+        }
+
+        .banner{
+            width:200px;
+            height:300px;
+            perspective:1000px;
+        }
+
+        .slider{
+            position:relative;
+            width:100%;
+            height:100%;
+            transform-style:preserve-3d;
+            animation:rotate 20s linear infinite;
+        }
+
+        .slider .item{
+            position:absolute;
+            width:100%;
+            height:100%;
+            left:0;
+            top:0;
+            transform:rotateY(calc((var(--position) - 1) * (360 / var(--quantity)) * 1deg))
+                      translateZ(400px);
+        }
+
+        .slider .item img{
+            width:100%;
+            height:100%;
+            object-fit:cover;
+            border-radius:10px;
+        }
+
+        @keyframes rotate{
+            from{ transform:rotateY(0deg); }
+            to{ transform:rotateY(360deg); }
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <h1>CLASSMODE</h1>
+        <div class="nav-buttons">
+            <a href="student-dashboard.html" class="btn">Login</a>
+            <a href="teacher-dashboard.html" class="btn">Register</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <h2>Turn Mobile Phones Into Learning Tools</h2>
+        <p>Improve classroom focus, track understanding, and help students learn better.</p>
+        <a href="login.html" class="btn start-btn">Get Started</a>
+    </section>
+
+    <section class="features">
+        <div class="feature-card">
+            <h3> Focus Mode</h3>
+            <p>Blocks distractions during class time</p>
+        </div>
+        <div class="feature-card">
+            <h3>❓ Micro Questions</h3>
+            <p>Check student understanding in real time</p>
+        </div>
+        <div class="feature-card">
+            <h3>💬 Anonymous Doubts</h3>
+            <p>Students can ask questions without fear</p>
+        </div>
+    </section>
+
+    <section class="slider-section">
+        <div class="banner">
+            <div class="slider" style="--quantity: 8">
+                <div class="item" style="--position: 1"><img src="images/Screenshot 2026-01-31 205726.png"></div>
+                <div class="item" style="--position: 2"><img src="images/Screenshot 2026-01-31 205956.png"></div>
+                <div class="item" style="--position: 3"><img src="images/Screenshot 2026-01-31 210144.png"></div>
+                <div class="item" style="--position: 4"><img src="images/Screenshot 2026-01-31 211008.png"></div>
+                <div class="item" style="--position: 5"><img src="images/ppp1.jpeg"></div>
+                <div class="item" style="--position: 6"><img src="images/ppp2.jpeg"></div>
+                <div class="item" style="--position: 7"><img src="images/ppp3.jpeg"></div>
+                <div class="item" style="--position: 8"><img src="images/ppp5.jpeg"></div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- MEGA FOOTER -->
+<footer class="mega-footer">
+
+    <div class="footer-grid">
+
+        <div class="footer-col">
+            <h4>Product</h4>
+            <a href="#">Latest launches</a>
+            <a href="#">Visual Suite</a>
+            <a href="#">Magic Studio</a>
+            <a href="#">Brand management</a>
+            <a href="#">Social media</a>
+            <a href="#">Features</a>
+            <a href="#">Print</a>
+            <a href="#">Apps Marketplace</a>
+        </div>
+
+        <div class="footer-col">
+            <h4>About</h4>
+            <a href="#">About ClassMode</a>
+            <a href="#">Newsroom</a>
+            <a href="#">Events</a>
+            <a href="#">Careers</a>
+            <a href="#">Social impact</a>
+            <a href="#">Sustainability</a>
+            <a href="#">Case Studies</a>
+        </div>
+
+        <div class="footer-col">
+            <h4>Plans</h4>
+            <a href="#">Pricing</a>
+            <a href="#">Pro</a>
+            <a href="#">Business</a>
+            <a href="#">Enterprise</a>
+            <a href="#">Education</a>
+            <a href="#">Nonprofits</a>
+            <a href="#">Contact Sales</a>
+        </div>
+
+        <div class="footer-col">
+            <h4>Help</h4>
+            <a href="#">Help Centre</a>
+            <a href="#">Security</a>
+            <a href="#">Trust Centre</a>
+            <a href="#">Accessibility</a>
+            <a href="#">Design School</a>
+            <a href="#">Sitemap</a>
+        </div>
+
+        <div class="footer-col">
+            <h4>Community</h4>
+            <a href="#">Creators</a>
+            <a href="#">Affiliates</a>
+            <a href="#">Developers</a>
+            <a href="#">Content partners</a>
+        </div>
+
+    </div>
+
+    <div class="footer-bottom">
+        <p>English (India)</p>
+        <div class="footer-links">
+            <a href="#">Privacy</a>
+            <a href="#">Terms</a>
+        </div>
+        <p>© 2026 ClassMode. All Rights Reserved.</p>
+    </div>
+
+</footer>
+
+
+</body>
+
+
+</html>

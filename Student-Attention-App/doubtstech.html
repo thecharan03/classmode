@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Student Portal - Chat</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
+
+body{display:flex;background:#f6f8fc;color:#1e293b}
+
+/* SIDEBAR */
+.sidebar{
+    width:230px;background:#ffffff;height:100vh;padding:20px;
+    box-shadow:2px 0 15px rgba(0,0,0,0.05);position:fixed
+}
+.sidebar h2{color:#4f46e5;margin-bottom:30px}
+.sidebar a{
+    display:flex;align-items:center;gap:12px;padding:10px;
+    border-radius:10px;text-decoration:none;color:#64748b;
+    margin-bottom:10px;font-weight:500;transition:0.2s
+}
+.sidebar a:hover{background:#eef2ff;color:#4f46e5}
+
+/* MAIN AREA */
+.main{margin-left:250px;width:100%;padding:25px;display:flex;flex-direction:column;}
+
+/* TOP BANNER */
+.banner{
+    background:#4f46e5;color:white;padding:25px;
+    border-radius:20px;display:flex;justify-content:space-between;
+    align-items:center;margin-bottom:25px
+}
+.banner h1{font-size:22px;font-weight:500}
+.banner p{opacity:0.9}
+
+/* CHATBOX */
+.chat-container{
+    flex:1; /* take remaining height */
+    background:white;
+    border-radius:20px;
+    padding:20px;
+    display:flex;
+    flex-direction:column;
+    box-shadow:0 10px 25px rgba(0,0,0,0.05);
+    overflow:hidden;
+}
+
+.chat-messages{
+    flex:1;
+    overflow-y:auto;
+    padding-right:10px;
+    margin-bottom:15px;
+}
+
+.message{
+    max-width:70%;
+    margin-bottom:10px;
+    padding:10px 15px;
+    border-radius:15px;
+    clear:both;
+}
+
+.message.user{
+    background:#4f46e5;
+    color:white;
+    align-self:flex-end;
+    border-bottom-right-radius:0;
+}
+
+.message.bot{
+    background:#f1f3f8;
+    color:#1e293b;
+    align-self:flex-start;
+    border-bottom-left-radius:0;
+}
+
+.chat-input{
+    display:flex;
+    gap:10px;
+}
+
+.chat-input input{
+    flex:1;
+    padding:10px 15px;
+    border-radius:15px;
+    border:1px solid #e2e8f0;
+    outline:none;
+}
+
+.chat-input button{
+    background:#4f46e5;
+    color:white;
+    border:none;
+    padding:10px 15px;
+    border-radius:15px;
+    cursor:pointer;
+    transition:0.2s;
+}
+
+.chat-input button:hover{
+    background:#3730a3;
+}
+
+/* Scrollbar */
+.chat-messages::-webkit-scrollbar{
+    width:6px;
+}
+.chat-messages::-webkit-scrollbar-thumb{
+    background:#cbd5e1;
+    border-radius:3px;
+}
+
+</style>
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+<!-- SIDEBAR -->
+<div class="sidebar">
+    <h2>student</h2>
+    <a href="classroom-panel.html"><i class="fa fa-home"></i> Dashboard</a>
+    
+    
+    <a href="doubtstech.html"><i class="fa fa-file"></i> Doubts</a>
+    
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+<!-- TOP BANNER -->
+<div class="banner">
+    <div>
+        <h1>Hi! <span id="studentName"> teacher </span></h1>
+        <p>Start chatting and sharing your comments.</p>
+    </div>
+    <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" width="80">
+</div>
+
+<!-- CHATBOX -->
+<div class="chat-container">
+    <div class="chat-messages" id="chatMessages">
+        <!-- Messages will appear here -->
+    </div>
+    <div class="chat-input">
+        <input type="text" id="chatInput" placeholder="Type your message..." />
+        <button id="sendBtn"><i class="fa fa-paper-plane"></i></button>
+    </div>
+</div>
+
+</div>
+
+<script>
+// Example student info from local storage
+let studentInfo = JSON.parse(localStorage.getItem("studentInfo"));
+if(studentInfo){
+    document.getElementById("studentName").innerText = studentInfo.name;
+}
+
+// Chat functionality
+const chatMessages = document.getElementById("chatMessages");
+const chatInput = document.getElementById("chatInput");
+const sendBtn = document.getElementById("sendBtn");
+
+function appendMessage(text, sender){
+    const msgDiv = document.createElement("div");
+    msgDiv.classList.add("message", sender);
+    msgDiv.innerText = text;
+    chatMessages.appendChild(msgDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+// Send message
+sendBtn.addEventListener("click", ()=>{
+    const message = chatInput.value.trim();
+    if(message === "") return;
+    appendMessage(message, "user");
+    chatInput.value = "";
+
+    // Example bot reply
+    setTimeout(()=>{
+        appendMessage("Thanks for your comment!", "bot");
+    },500);
+});
+
+// Send on Enter key
+chatInput.addEventListener("keydown", (e)=>{
+    if(e.key === "Enter"){
+        sendBtn.click();
+    }
+});
+</script>
+
+</body>
+</html>

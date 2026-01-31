@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Schedule</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
+
+body{display:flex;background:#f6f8fc;color:#1e293b}
+
+/* SIDEBAR */
+.sidebar{
+    width:230px;background:#ffffff;height:100vh;padding:20px;
+    box-shadow:2px 0 15px rgba(0,0,0,0.05);position:fixed
+}
+.sidebar h2{color:#4f46e5;margin-bottom:30px}
+.sidebar a{
+    display:flex;align-items:center;gap:12px;padding:10px;
+    border-radius:10px;text-decoration:none;color:#64748b;
+    margin-bottom:10px;font-weight:500;transition:0.2s
+}
+.sidebar a:hover{background:#eef2ff;color:#4f46e5}
+
+/* MAIN */
+.main{margin-left:250px;width:100%;padding:25px}
+
+/* HEADER */
+.header{
+    background:#4f46e5;color:white;padding:20px;
+    border-radius:16px;margin-bottom:20px;
+    display:flex;justify-content:space-between;align-items:center
+}
+
+/* TIMETABLE GRID */
+.timetable{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:20px;
+}
+
+/* TIME BLOCK */
+.slot{
+    background:white;
+    border-radius:16px;
+    padding:16px;
+    box-shadow:0 8px 20px rgba(0,0,0,0.05);
+    border-left:6px solid #4f46e5;
+    transition:0.2s;
+}
+.slot:hover{transform:translateY(-3px)}
+
+.time{
+    font-weight:600;
+    color:#4f46e5;
+    margin-bottom:6px;
+}
+.subject{
+    font-size:16px;
+    font-weight:500;
+}
+.teacher{
+    font-size:13px;
+    color:#64748b;
+    margin-top:4px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="sidebar">
+    <h2>student</h2>
+    <a href="student-dashboard.html"><i class="fa fa-home"></i> Dashboard</a>
+    <a href="classes.html"><i class="fa fa-book"></i> classes</a>
+    <a href="timetable.html"><i class="fa fa-calendar"></i> Schedule</a>
+    <a href="doubts.html"><i class="fa fa-file"></i> Doubts</a>
+    <a href="attendence.html"><i class="fa fa-bell"></i> attendance</a>
+</div>
+
+
+<!-- MAIN -->
+<div class="main">
+
+<div class="header">
+    <h2>Today's Schedule</h2>
+    <span id="studentName"></span>
+</div>
+
+<div class="timetable" id="timetable">
+
+    <div class="slot">
+        <div class="time">09:00 AM – 10:00 AM</div>
+        <div class="subject">Physics</div>
+        <div class="teacher">Mr. Sharma</div>
+    </div>
+
+    <div class="slot">
+        <div class="time">10:15 AM – 11:15 AM</div>
+        <div class="subject">C++ Programming</div>
+        <div class="teacher">Mrs. Patel</div>
+    </div>
+
+    <div class="slot">
+        <div class="time">11:30 AM – 12:15 PM</div>
+        <div class="subject">English</div>
+        <div class="teacher">Ms. Roy</div>
+    </div>
+
+    <div class="slot">
+        <div class="time">01:00 PM – 02:00 PM</div>
+        <div class="subject">Mathematics</div>
+        <div class="teacher">Mr. Khan</div>
+    </div>
+
+    <div class="slot">
+        <div class="time">02:15 PM – 03:00 PM</div>
+        <div class="subject">Soft Skills</div>
+        <div class="teacher">Mrs. Gupta</div>
+    </div>
+
+</div>
+</div>
+
+<script>
+let studentInfo = JSON.parse(localStorage.getItem("studentInfo")) || {name:"Student"};
+document.getElementById("studentName").innerText = studentInfo.name;
+</script>
+
+</body>
+</html>

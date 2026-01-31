@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Classroom Panel</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
+body{display:flex;background:#f6f8fc;color:#1e293b}
+
+/* SIDEBAR */
+.sidebar{width:230px;background:#ffffff;height:100vh;padding:20px;box-shadow:2px 0 15px rgba(0,0,0,0.05);position:fixed}
+.sidebar h2{color:#4f46e5;margin-bottom:30px}
+.sidebar a{display:flex;align-items:center;gap:12px;padding:10px;border-radius:10px;text-decoration:none;color:#64748b;margin-bottom:10px;font-weight:500;transition:0.2s}
+.sidebar a:hover{background:#eef2ff;color:#4f46e5}
+
+/* MAIN */
+.main{margin-left:250px;width:100%;padding:25px}
+
+/* HEADER */
+.header{
+    background:#4f46e5;
+    color:white;
+    padding:25px;
+    border-radius:20px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:25px;
+}
+.timer-box{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    background:rgba(255,255,255,0.15);
+    padding:8px 15px;
+    border-radius:50px;
+}
+
+/* ALERT DISPLAY */
+.alert-box{
+    margin-top:10px;
+    padding:10px 15px;
+    border-radius:10px;
+    background:#fff7ed;
+    border-left:5px solid #f59e0b;
+    font-size:14px;
+    margin-bottom:8px;
+}
+.alert-time{
+    font-size:12px;
+    color:#64748b;
+}
+.violation{
+    background:#fee2e2;
+    border-left:5px solid #ef4444;
+    padding:10px;
+    border-radius:8px;
+    margin-bottom:8px;
+    font-size:14px;
+}
+
+#timer{
+    font-size:22px;
+    font-weight:600;
+}
+.status{font-size:12px}
+.status.on{color:#ffdd57}
+.status.off{color:#bbf7d0}
+
+/* CARDS */
+.card{background:white;border-radius:18px;box-shadow:0 10px 25px rgba(0,0,0,0.05);padding:20px;margin-bottom:20px}
+
+/* INPUTS */
+input,textarea{padding:10px 15px;border-radius:12px;border:1px solid #e2e8f0;width:100%;margin-bottom:10px}
+
+/* BUTTON */
+button{background:#4f46e5;color:white;padding:8px 15px;border-radius:10px;border:none;cursor:pointer;margin-left:5px}
+button:hover{background:#3730a3}
+button.deleteBtn{background:#dc2626}
+
+/* APPS */
+.app{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #e2e8f0}
+.toggle-switch{position:relative;width:50px;height:24px}
+.toggle-switch input{opacity:0;width:0;height:0}
+.slider{position:absolute;top:0;left:0;right:0;bottom:0;background:#e2e8f0;border-radius:34px}
+.slider:before{position:absolute;content:"";height:18px;width:18px;left:3px;bottom:3px;background:white;border-radius:50%}
+input:checked + .slider{background:#4f46e5}
+input:checked + .slider:before{transform:translateX(26px)}
+</style>
+</head>
+
+<body>
+
+<div class="sidebar">
+    <h2>Education++</h2>
+    <a href="classroom-panel.html"><i class="fa fa-home"></i> Dashboard</a>
+    <a href="doubtstech.html"><i class="fa fa-home"></i> Doubts</a>
+</div>
+
+<div class="main">
+
+<div class="header">
+    <h1 id="classTitle">Mathematics Class</h1>
+    <div class="timer-box">
+        <button onclick="startClass()"><i class="fa fa-play"></i></button>
+        <button onclick="endClass()"><i class="fa fa-stop"></i></button>
+        <span id="timer">59:00</span>
+        <span id="statusText" class="status off">Apps Unlocked</span>
+    </div>
+</div>
+
+<!-- STUDENTS -->
+<div class="card">
+<h3>Add Students</h3>
+<input id="studentName" placeholder="Student Name">
+<button onclick="addStudent()">Add</button>
+<ul id="studentList"></ul>
+</div>
+
+<div class="card">
+<h3>Focus Violations</h3>
+<P>student name appear here when using other tabs or applications</P>
+<div id="violationList"></div>
+</div>
+
+
+<!-- ATTENDANCE -->
+<div class="card">
+<h3>Attendance</h3>
+<p>Code: <b id="attendanceCode">----</b></p>
+<button onclick="generateCode()">Generate Code</button>
+<ul id="attendanceList"></ul>
+</div>
+
+<!-- APPS -->
+<div class="card">
+<h3>Class Mode</h3>
+<div id="apps"></div>
+</div>
+
+
+
+<!-- ALERTS -->
+<div class="card">
+<h3>Send Alert</h3>
+<textarea id="alertText" placeholder="Type alert message..."></textarea>
+<button onclick="sendAlert()"><i class="fa fa-bell"></i> Send Alert</button>
+<div id="alertList"></div>
+</div>
+
+<!-- CHAT DOUBTS -->
+<div class="card">
+<h3>Anonymous Doubts Chat</h3>
+<div class="chat-container" id="chatContainer"></div>
+<div class="chat-input">
+ <input id="chatInput" placeholder="Type a message...">
+ <button onclick="sendChat()"><i class="fa fa-paper-plane"></i> Send</button>
+</div>
+</div>
+</div>
+
+<script>
+let classroom={students:[],todayAttendance:[],blockedApps:[],attendanceCode:""}
+
+/* TIMER SYSTEM */
+let totalTime=59*60
+let timeLeft=totalTime
+let timerInterval=null
+const timerDisplay=document.getElementById("timer")
+const statusText=document.getElementById("statusText")
+
+function updateTimer(){
+ let m=Math.floor(timeLeft/60)
+ let s=timeLeft%60
+ timerDisplay.textContent=`${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`
+}
+
+function startClass(){
+ if(timerInterval) return
+ classroom.blockedApps=socialApps.map(a=>a.name)
+ renderApps()
+ statusText.textContent="Focus Mode ON"
+ statusText.classList.replace("off","on")
+ timerInterval=setInterval(()=>{
+  if(timeLeft>0){timeLeft--;updateTimer()}
+  else endClass(true)
+ },1000)
+}
+
+function endClass(auto=false){
+ clearInterval(timerInterval)
+ timerInterval=null
+ timeLeft=totalTime
+ updateTimer()
+ classroom.blockedApps=[]
+ renderApps()
+ statusText.textContent="Apps Unlocked"
+ statusText.classList.replace("on","off")
+ if(auto) alert("Class ended automatically after 59 minutes.")
+}
+
+/* STUDENTS */
+function addStudent(){let name=document.getElementById("studentName").value.trim();if(!name)return;classroom.students.push({name});renderStudents();document.getElementById("studentName").value=""}
+function renderStudents(){let list=document.getElementById("studentList");list.innerHTML="";classroom.students.forEach(s=>{list.innerHTML+=`<li>${s.name}</li>`})}
+
+/* ATTENDANCE */
+function generateCode(){classroom.attendanceCode=Math.floor(1000+Math.random()*9000);document.getElementById("attendanceCode").innerText=classroom.attendanceCode}
+
+/* APPS */
+let socialApps=[{name:"Instagram",icon:"fa-instagram"},{name:"WhatsApp",icon:"fa-whatsapp"},{name:"YouTube",icon:"fa-youtube"},{name:"Facebook",icon:"fa-facebook"},{name:"Snapchat",icon:"fa-snapchat-ghost"}]
+function renderApps(){
+ let div=document.getElementById("apps")
+ div.innerHTML=""
+ socialApps.forEach(app=>{
+  let blocked=classroom.blockedApps.includes(app.name)
+  div.innerHTML+=`<div class="app"><span><i class="fa-brands ${app.icon}"></i> ${app.name}</span><label class="toggle-switch"><input type="checkbox" ${blocked?"checked":""} disabled><span class="slider"></span></label></div>`
+ })
+}
+/* ALERT SYSTEM */
+classroom.alerts = [];
+
+function sendAlert(){
+    let text = document.getElementById("alertText").value.trim();
+    if(!text) return;
+
+    let alertObj = {
+        text: text,
+        time: new Date().toLocaleTimeString()
+    };
+
+    classroom.alerts.push(alertObj);
+    renderAlerts();
+
+    document.getElementById("alertText").value="";
+}
+
+function renderAlerts(){
+    let list = document.getElementById("alertList");
+    list.innerHTML="";
+
+    classroom.alerts.slice().reverse().forEach(a=>{
+        list.innerHTML += `
+            <div class="alert-box">
+                <div>${a.text}</div>
+                <div class="alert-time">${a.time}</div>
+            </div>
+        `;
+    });
+}
+function loadViolations(){
+    let list = document.getElementById("violationList");
+    let data = JSON.parse(localStorage.getItem("violations")) || [];
+    list.innerHTML="";
+
+    data.slice().reverse().forEach(v=>{
+        list.innerHTML += `
+        <div class="violation">
+            ⚠️ <b>${v.name}</b> — ${v.type}
+            <div style="font-size:12px;color:#64748b">${v.time}</div>
+        </div>`;
+    });
+}
+
+setInterval(loadViolations, 2000); // auto refresh
+
+
+
+updateTimer()
+renderApps()
+</script>
+
+</body>
+</html>

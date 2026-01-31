@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Student Dashboard</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
+
+body{display:flex;background:#f6f8fc;color:#1e293b}
+
+/* SIDEBAR */
+.sidebar{
+    width:230px;background:#ffffff;height:100vh;padding:20px;
+    box-shadow:2px 0 15px rgba(0,0,0,0.05);position:fixed
+}
+.sidebar h2{color:#4f46e5;margin-bottom:30px}
+.sidebar a{
+    display:flex;align-items:center;gap:12px;padding:10px;
+    border-radius:10px;text-decoration:none;color:#64748b;
+    margin-bottom:10px;font-weight:500;transition:0.2s
+}
+.sidebar a:hover{background:#eef2ff;color:#4f46e5}
+
+/* MAIN */
+.main{margin-left:250px;width:100%;padding:25px}
+
+/* HEADER */
+.header{
+    background:#4f46e5;color:white;padding:20px;
+    border-radius:16px;margin-bottom:20px;
+    display:flex;justify-content:space-between;align-items:center
+}
+
+/* GRID */
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:20px;
+}
+
+/* CARDS */
+.card{
+    background:white;padding:18px;border-radius:16px;
+    box-shadow:0 8px 20px rgba(0,0,0,0.05)
+}
+
+button{
+    background:#4f46e5;color:white;border:none;
+    padding:10px;border-radius:8px;cursor:pointer;
+    margin-top:10px;width:100%;font-weight:500
+}
+button:hover{background:#4338ca}
+
+input{
+    width:100%;padding:10px;border-radius:8px;
+    border:1px solid #e2e8f0;margin-top:10px
+}
+
+.stat{
+    font-size:22px;font-weight:600;color:#4f46e5
+}
+</style>
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+<div class="sidebar">
+    <h2>student</h2>
+    <a href="student-dashboard.html"><i class="fa fa-home"></i> Dashboard</a>
+    <a href="classes.html"><i class="fa fa-book"></i> classes</a>
+    <a href="timetable.html"><i class="fa fa-calendar"></i> Schedule</a>
+    <a href="doubts.html"><i class="fa fa-file"></i> Doubts</a>
+    <a href="attendence.html"><i class="fa fa-bell"></i> attendance</a>
+</div>
+<!-- MAIN -->
+<div class="main">
+
+<div class="header">
+    <h2>Student Dashboard</h2>
+    <span id="studentName"></span>
+</div>
+
+<div class="grid">
+
+<!-- JOIN CLASS -->
+<div class="card">
+    <h3>🔑 Join Class</h3>
+    <p>Enter class code shared by teacher</p>
+    <input id="classCodeInput" placeholder="Enter Class Code">
+    <button onclick="joinClass()">Join Now</button>
+    <p id="joinMsg" style="margin-top:8px;color:#dc2626;"></p>
+</div>
+
+<!-- MARK ATTENDANCE -->
+<div class="card">
+    <h3>📝 Mark Attendance</h3>
+    <p>Enter attendance code given by teacher</p>
+    <input id="attendanceInput" placeholder="Enter Attendance Code">
+    <button onclick="markAttendance()">Submit Attendance</button>
+    <p id="attendanceMsg" style="margin-top:8px;font-weight:500;"></p>
+</div>
+
+</div>
+</div>
+
+<script>
+let studentInfo = JSON.parse(localStorage.getItem("studentInfo")) || {name:"Student"};
+document.getElementById("studentName").innerText = studentInfo.name;
+
+let classrooms = JSON.parse(localStorage.getItem("teacherClassrooms")) || [];
+
+/* JOIN CLASS */
+function joinClass(){
+    let code=document.getElementById("classCodeInput").value.trim();
+    let found=classrooms.find(c=>c.joinCode===code);
+
+    if(!found){
+        document.getElementById("joinMsg").innerText="Invalid class code";
+        return;
+    }
+
+    localStorage.setItem("activeClassId", found.classId);
+    document.getElementById("joinMsg").style.color="#16a34a";
+    document.getElementById("joinMsg").innerText="Class joined successfully!";
+}
+
+/* MARK ATTENDANCE */
+function markAttendance(){
+    let code = document.getElementById("attendanceInput").value.trim();
+    let msg = document.getElementById("attendanceMsg");
+
+    let activeClassId = localStorage.getItem("activeClassId");
+
+    if(!activeClassId){
+        msg.style.color="#dc2626";
+        msg.innerText="Join a class first!";
+        return;
+    }
+
+    let classroom = classrooms.find(c=>c.classId==activeClassId);
+
+    if(!classroom || classroom.attendanceCode != code){
+        msg.style.color="#dc2626";
+        msg.innerText="Invalid attendance code";
+        return;
+    }
+
+    if(!classroom.todayAttendance) classroom.todayAttendance=[];
+
+    if(classroom.todayAttendance.find(a=>a.name==studentInfo.name)){
+        msg.style.color="#f59e0b";
+        msg.innerText="Attendance already marked";
+        return;
+    }
+
+    classroom.todayAttendance.push({
+        name: studentInfo.name,
+        time: new Date().toLocaleTimeString()
+    });
+
+    localStorage.setItem("teacherClassrooms", JSON.stringify(classrooms));
+
+    msg.style.color="#16a34a";
+    msg.innerText="Attendance marked successfully ✅";
+}
+</script>
+
+</body>
+</html>

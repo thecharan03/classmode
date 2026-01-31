@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Attendance</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
+
+body{display:flex;background:#f6f8fc;color:#1e293b}
+
+/* SIDEBAR */
+.sidebar{
+    width:230px;background:#ffffff;height:100vh;padding:20px;
+    box-shadow:2px 0 15px rgba(0,0,0,0.05);position:fixed
+}
+.sidebar h2{color:#4f46e5;margin-bottom:30px}
+.sidebar a{
+    display:flex;align-items:center;gap:12px;padding:10px;
+    border-radius:10px;text-decoration:none;color:#64748b;
+    margin-bottom:10px;font-weight:500;transition:0.2s
+}
+.sidebar a:hover{background:#eef2ff;color:#4f46e5}
+
+/* MAIN */
+.main{margin-left:250px;width:100%;padding:25px}
+
+/* HEADER */
+.header{
+    background:#4f46e5;color:white;padding:20px;
+    border-radius:16px;margin-bottom:20px;
+    display:flex;justify-content:space-between;align-items:center
+}
+
+/* GRID */
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+    gap:25px;
+}
+
+/* CARD */
+.card{
+    background:white;padding:20px;border-radius:18px;
+    box-shadow:0 8px 20px rgba(0,0,0,0.05);
+    text-align:center
+}
+
+/* CIRCLE PROGRESS */
+.circle{
+    width:140px;
+    height:140px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin:15px auto;
+    font-weight:600;
+    font-size:22px;
+    color:#1e293b;
+}
+
+/* SUBJECT TITLE */
+.subject{font-weight:500;margin-top:10px}
+
+/* STATUS COLORS */
+.good{background:conic-gradient(#16a34a 0% 85%, #e2e8f0 85%)}
+.medium{background:conic-gradient(#f59e0b 0% 65%, #e2e8f0 65%)}
+.low{background:conic-gradient(#dc2626 0% 40%, #e2e8f0 40%)}
+
+.inner{
+    width:105px;
+    height:105px;
+    background:white;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+</style>
+</head>
+
+<body>
+
+<div class="sidebar">
+    <h2>Education</h2>
+    <a href="student-dashboard.html"><i class="fa fa-home"></i> Dashboard</a>
+    <a href="classes.html"><i class="fa fa-book"></i> classes</a>
+    <a href="timetable.html"><i class="fa fa-calendar"></i> Schedule</a>
+    <a href="doubts.html"><i class="fa fa-file"></i> Doubts</a>
+    <a href="attendence.html"><i class="fa fa-bell"></i> attendance</a>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+<div class="header">
+    <h2>Attendance Overview</h2>
+    <span id="studentName"></span>
+</div>
+
+<div class="grid">
+
+<!-- PHYSICS -->
+<div class="card">
+    <h3>Physics</h3>
+    <div class="circle good">
+        <div class="inner">85%</div>
+    </div>
+    <div class="subject">Excellent Attendance</div>
+</div>
+
+<!-- C++ -->
+<div class="card">
+    <h3>C++ Programming</h3>
+    <div class="circle medium">
+        <div class="inner">65%</div>
+    </div>
+    <div class="subject">Needs Improvement</div>
+</div>
+
+<!-- ENGLISH -->
+<div class="card">
+    <h3>English</h3>
+    <div class="circle good">
+        <div class="inner">90%</div>
+    </div>
+    <div class="subject">Excellent Attendance</div>
+</div>
+
+<!-- MATHS -->
+<div class="card">
+    <h3>Mathematics</h3>
+    <div class="circle low">
+        <div class="inner">40%</div>
+    </div>
+    <div class="subject">Low Attendance</div>
+</div>
+
+<!-- SOFT SKILLS -->
+<div class="card">
+    <h3>Soft Skills</h3>
+    <div class="circle medium">
+        <div class="inner">70%</div>
+    </div>
+    <div class="subject">Average Attendance</div>
+</div>
+
+</div>
+</div>
+
+<script>
+let studentInfo = JSON.parse(localStorage.getItem("studentInfo")) || {name:"Student"};
+document.getElementById("studentName").innerText = studentInfo.name;
+</script>
+
+</body>
+</html>
